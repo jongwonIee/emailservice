@@ -2,7 +2,25 @@ class HomeController < ApplicationController
   def index
   end
   def write
-    
+       
+        @jaemok = params[:title]
+        @cherry = params[:email]
+        @naeyong = params[:content]
+        
+        mg_client = Mailgun::Client.new("key-1c3adfd8b7583556c6bd90c223e21659")
+
+        message_params =  {
+                   from: 'stargosu@leejongwon.com',
+                   to:   @cherry,
+                   subject: @jaemok,
+                   text:    @naeyong,
+                  }
+
+        result = mg_client.send_message('sandboxa6dadf35078843e29ec8424676a48e60.mailgun.org', message_params).to_h!
+
+        message_id = result['id']
+        message = result['message']
+
       
       new_post = Post.new
       new_post.title = params[:title]
